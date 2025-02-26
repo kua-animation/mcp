@@ -3,28 +3,28 @@
 #include <unistd.h>
 #include <string.h>
 
-#define MCP 256
+#define MCP 512
 
 int D[30000];
 int Index = 0;
 
 int initilaz(int j, char C[MCP]);
 
-int ride(char C[MCP]);
+int ride(char C[MCP], int isDebuge);
 
-int main() {
+int main(int argc, char *argv[]) {
 	char N[MCP];
 	
-	char *file_name = malloc(100);
-
 	int repid;
 
-	printf("set the file name: ");
+	int isDebuge;
 
-	scanf("%s", file_name);
+	if (argc > 2) {
+		isDebuge = 1;
+	} else { isDebuge = 0; }
 
 	FILE *file;
-	file = fopen(file_name, "r");
+	file = fopen(argv[1], "r");
 
 	if (!file) {
 		printf("\n\tno file\n");
@@ -33,8 +33,8 @@ int main() {
 	}
 
 	while (fgets(N, sizeof(N), file)) {
-		int B = ride(N);
-		
+		int B = ride(N, isDebuge);
+
 		if (B <= -1) {
 			fclose(file);
 			printf("\n\tsyntex error %d\n", B);
@@ -48,7 +48,7 @@ int main() {
 	return 0;
 }
 
-int ride(char C[MCP]) {
+int ride(char C[MCP], int isDebuge) {
 
 	for (int j = 0; j < strlen(C)+1; j++) {
 		if (C[j] == ':') {
@@ -59,12 +59,17 @@ int ride(char C[MCP]) {
 			} else if ( C[j+2] != ' ' && j+3 < strlen(C)){
 				return -3;
 			}
-			else if (C[j+1] == 'O') {
-				printf("%c", (char)(D[Index]));
-				fflush(stdout);
-				Index++;
-				return 0;
+			if (C[j+1] == 'O') {
+				if (isDebuge) {
+					printf("cell %d :%c\n", Index, (char)(D[Index]));
+					fflush(stdout);
+				} else {
+					printf("%c", (char)(D[Index]));
+				}
 			}
+		}
+		else if (C[j] == '@') {
+			return 0;
 		}
 	}	
 	return -2;
@@ -78,19 +83,19 @@ int initilaz(int j, char C[MCP]) {
 		case ')':
 			D[Index] += 5;
 		break;
-		case ']':
+		case 'D':
 			D[Index] += 10;
 		break;
-		case '/':
+		case 'l':
 			D[Index] -= 1;
 		break;
 		case '(':
 			D[Index] -= 5;
 		break;
-		case '[':
+		case 'C':
 			D[Index] -= 5;
 		break;
-		case '|':
+		case ',':
 			usleep(100000);
 		break;
 		case '<':
@@ -101,6 +106,9 @@ int initilaz(int j, char C[MCP]) {
 		break;
 		case 'O':
 			return 0;
+		break;
+		case 'J':
+			D[Index+D[Index+1]] = D[Index-D[Index]];
 		break;
 		default:
 			return -1;
