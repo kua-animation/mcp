@@ -17,11 +17,13 @@ int main(int argc, char *argv[]) {
 	
 	int repid;
 
-	int isDebuge;
-
-	if (argc > 2) {
-		isDebuge = 1;
-	} else { isDebuge = 0; }
+	int isDebuge = 0;
+	
+	if (argc >= 3) {
+		if (!strcmp("-g", argv[2])){
+			isDebuge = 1;
+		}
+	}
 
 	FILE *file;
 	file = fopen(argv[1], "r");
@@ -93,7 +95,7 @@ int initilaz(int j, char C[MCP]) {
 			D[Index] -= 5;
 		break;
 		case 'C':
-			D[Index] -= 5;
+			D[Index] -= 10;
 		break;
 		case ',':
 			usleep(100000);
@@ -103,6 +105,12 @@ int initilaz(int j, char C[MCP]) {
 		break;
 		case '>':
 			Index++;
+		break;
+		case '[':
+			Index-= 5;
+		break;
+		case ']':
+			Index+= 5;
 		break;
 		case 'O':
 			return 0;
