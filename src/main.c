@@ -3,28 +3,36 @@
 #include "include/graphic.h"
 #include "include/physics.h"
 
-#define Points 100
+#define MCP_PARTICLE 15
+#define MCP_WINDOW_W 1200
+#define MCP_WINDOW_H 400 
 
 SDL_Window* CreateWindow(int width, int height, const char* title);
 
 SDL_Renderer* CreateRenderer(SDL_Window* window);
 
-MCPPosition Pos[Points];
-
+MCPPosition Pos[MCP_PARTICLE];
 
 int main(int argc, char *argv[]) {
 	SDL_Window* Win;
-	Win = CreateWindow(1200, 1200, "andrej");
+	Win = CreateWindow(MCP_WINDOW_W, MCP_WINDOW_H, "andrej");
 	SDL_Renderer* Ren = CreateRenderer(Win);
 
 	SDL_Event event;
 	int running = 1;
 	int MovIng = 0;
 
-	Pos[Points-1].X = 200/Points;
-	Pos[Points-1].Y = 200/Points;
+	int DirX = 0;
+	int DirY = 0;
 
-	MCPColor colorline = {255, 255, 255, 255};
+	Pos[MCP_PARTICLE-1].X = 200/MCP_PARTICLE;
+	Pos[MCP_PARTICLE-1].Y = 200/MCP_PARTICLE;
+
+	Pos[0].X = 2;
+	Pos[0].Y = 0;
+
+	MCPColor colorline = {180, 255, 210, 255};
+	MCPColor colorPoints = {210, 100, 120, 255};
 
 	while (running)	{
 		while (SDL_PollEvent(&event)) {
@@ -39,17 +47,21 @@ int main(int argc, char *argv[]) {
 				}
 			}
 		}
-			
-		if (MovIng) {
-			SDL_GetMouseState(&Pos[0].X, &Pos[0].Y);
+		
+		if (MCP_Physics_Move(Pos[0], MCP_WINDOW_W, MCP_WINDOW_H)) {
+			printf("a");
+			fflush(stdout);
 		}
-		
-		
+
+		SDL_GetMouseState(&Pos[0].X, &Pos[0].Y);
+
 		SDL_SetRenderDrawColor(Ren, 0, 0, 0, 255);
 		SDL_RenderClear(Ren);
-
-		MCP_Physics_Line(Ren, Pos, Points, colorline);
-
+		if (MovIng) {
+			MCP_Physics_Points(Ren, Pos, MCP_PARTICLE, colorPoints);
+		} else { 
+			MCP_Physics_Chain(Ren, Pos, MCP_PARTICLE, 0, colorPoints, colorline);
+		}
 		SDL_RenderPresent(Ren);
 
 		SDL_Delay(10);
