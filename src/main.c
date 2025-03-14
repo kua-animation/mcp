@@ -9,9 +9,9 @@ MCPPosition Pos[6];
 MCPRotation Rret[6];
 MCPPosition Ofset[6]; 
 	
-MCPPlayer Player = {0.5f, 0.0f, 0.0f};
+MCPPlayer Player = {0.0f, 0.0f, 0.0f};
+MCPPosition CPos = {0.0f, 0.0f, -11.0f};
 void Loop(MCPPosition Pos[], MCPPosition OfSet[], MCPPlayer Player, MCPRotation Rotation[], SDL_Window* window);
-
 int main(int argc, char* argv[]) {
 
 
@@ -19,18 +19,8 @@ int main(int argc, char* argv[]) {
 
 	MCP_Init(WINDOW_SIZE_W, WINDOW_SIZE_H);
 
+	MCP_Draw_Cube(Ofset, Pos, Rret, CPos, Player, 0);
 	
-	MCP_Set_Position(&Ofset[0], 0.0f, 0.0f, -6.0f);
-	MCP_Set_Position(&Ofset[1], 1.0f, 0.0f, -6.0f);
-	MCP_Set_Position(&Ofset[2], 0.5f, 0.0f, -5.5f);
-	
-	for (int i = 0; i < 3; i ++) {
-		MCP_Set_Position_By_Player(&Pos[i], Ofset[i], Player);
-	}
-
-	MCP_Set_Rotation(&Rret[0], 90.0f, 0.0f, 1.0f, 0.0f);
-	MCP_Set_Rotation(&Rret[1], 90.0f, 0.0f, 1.0f, 0.0f);
-
 	MCP_Main_Loop(Loop, Pos, Ofset, Player, Rret, window);
 
 	return 0;
@@ -81,3 +71,4 @@ void Loop(MCPPosition Pos[], MCPPosition OfSet[], MCPPlayer Player, MCPRotation 
 	SDL_Quit();
 	
 }
+

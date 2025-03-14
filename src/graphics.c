@@ -24,6 +24,26 @@ void MCP_Draw_Plane(MCPPosition Pos, MCPRotation Rotation, SDL_Window* Win) {
 	glPopMatrix();
 }
 
+ void MCP_Draw_Cube(MCPPosition *Ofset, MCPPosition *Pos, MCPRotation *Rota, MCPPosition Position, MCPPlayer Player, int start) {
+	if (Position.z >= 0) {
+		MCP_Set_Position(&Ofset[start], Position.x - 0.5f, Position.y, Position.z+0.5f);
+		MCP_Set_Position(&Ofset[start+1], Position.x + 0.5f, Position.y, Position.z+0.5f);
+		MCP_Set_Position(&Ofset[start+2], Position.x, Position.y, Position.z);
+	} else {
+		MCP_Set_Position(&Ofset[start], Position.x + 0.5f, Position.y, Position.z-0.5f);
+		MCP_Set_Position(&Ofset[start+1], Position.x - 0.5f, Position.y, Position.z-0.5f);
+		MCP_Set_Position(&Ofset[start+2], Position.x, Position.y, Position.z);
+	}
+
+	for (int i = 0; i < 3; i ++) { 
+		MCP_Set_Position_By_Player(&Pos[i+start], Ofset[i+start], Player);
+	}
+
+	MCP_Set_Rotation(&Rota[start], 90.0f, 0.0f, 1.0f, 0.0f);
+	MCP_Set_Rotation(&Rota[start+1], 90.0f, 0.0f, 1.0f, 0.0f);
+
+}
+
 void MCP_Set_Position(MCPPosition *Pos, float x, float y, float z) {
 	Pos->x = x;
 	Pos->y = y;

@@ -31,10 +31,10 @@ void MCP_Set_Rotation(MCPRotation *Rotation, float a, float x, float y, float z)
 
 void MCP_Init(int w, int h);
 
-void MCP_Render(MCPPosition Pos[], MCPRotation Rret[], SDL_Window* Win, int count);
-
 void MCP_Set_Position_By_Ofset(MCPPosition *Pos, MCPPosition Ofset);
 
 void MCP_Set_Position_By_Player(MCPPosition *Pos, MCPPosition Ofset, MCPPlayer Player);
+
+void MCP_Draw_Cube(MCPPosition *Ofset, MCPPosition *Pos, MCPRotation *Rota, MCPPosition Position, MCPPlayer Player, int start);
 
 #endif
