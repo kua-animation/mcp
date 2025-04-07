@@ -29,13 +29,15 @@ void MCP_Draw_Plane(MCPPosition Pos, MCPRotation Rotation, SDL_Window* Win) {
 		MCP_Set_Position(&Ofset[start], Position.x - 0.5f, Position.y, Position.z+0.5f);
 		MCP_Set_Position(&Ofset[start+1], Position.x + 0.5f, Position.y, Position.z+0.5f);
 		MCP_Set_Position(&Ofset[start+2], Position.x, Position.y, Position.z);
+		MCP_Set_Position(&Ofset[start+3], Position.x, Position.y, Position.z+1.0f);
 	} else {
 		MCP_Set_Position(&Ofset[start], Position.x + 0.5f, Position.y, Position.z-0.5f);
 		MCP_Set_Position(&Ofset[start+1], Position.x - 0.5f, Position.y, Position.z-0.5f);
 		MCP_Set_Position(&Ofset[start+2], Position.x, Position.y, Position.z);
+		MCP_Set_Position(&Ofset[start+3], Position.x, Position.y, Position.z-1.0f);
 	}
 
-	for (int i = 0; i < 3; i ++) { 
+	for (int i = 0; i < 4; i ++) { 
 		MCP_Set_Position_By_Player(&Pos[i+start], Ofset[i+start], Player);
 	}
 

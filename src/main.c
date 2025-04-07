@@ -1,74 +1,31 @@
 #include "include/include.h"
 #include "include/graphics.h"
 #include "include/video.h"
+#include "include/controls.h"
+#include "include/loop.h"
 
 #define WINDOW_SIZE_H 600
 #define WINDOW_SIZE_W 800
 
-MCPPosition Pos[6];
-MCPRotation Rret[6];
-MCPPosition Ofset[6]; 
-	
-MCPPlayer Player = {0.0f, 0.0f, 0.0f};
-MCPPosition CPos = {0.0f, 0.0f, -11.0f};
-void Loop(MCPPosition Pos[], MCPPosition OfSet[], MCPPlayer Player, MCPRotation Rotation[], SDL_Window* window);
-int main(int argc, char* argv[]) {
+MCPPosition Pos[8];
+MCPRotation Rret[8];
+MCPPosition Ofset[8]; 
+MCPPosition CPos[2];
 
+MCPPlayer Player = {0.0f, 0.0f, 0.0f};
+
+int main(int argc, char* argv[]) {
+	MCP_Set_Position(&CPos[0], 0.0f, 0.0f, -4.0f);
+	MCP_Set_Position(&CPos[1], 1.0f, 1.9f, -10.0f);	
 
 	SDL_Window* window  = MCP_Create_Window("OpenGL_&_SDL", WINDOW_SIZE_W, WINDOW_SIZE_H);
 
 	MCP_Init(WINDOW_SIZE_W, WINDOW_SIZE_H);
 
-	MCP_Draw_Cube(Ofset, Pos, Rret, CPos, Player, 0);
+	MCP_Draw_Cube(Ofset, Pos, Rret, CPos[0], Player, 0);
+	MCP_Draw_Cube(Ofset, Pos, Rret, CPos[1], Player, 4);
 	
 	MCP_Main_Loop(Loop, Pos, Ofset, Player, Rret, window);
 
 	return 0;
 }
-
-void Loop(MCPPosition Pos[], MCPPosition OfSet[], MCPPlayer Player, MCPRotation Rotation[], SDL_Window* window) {
-	int running = 1;
-	SDL_Event event;
-
-
-	while (running) {
-		while (SDL_PollEvent(&event)) {
-			if(event.type == SDL_QUIT) {
-				running = 0;
-			} if (event.type == SDL_KEYDOWN) {
-				switch (event.key.keysym.sym) {
-					case SDLK_a:
-						Player.x -= 0.1f;
-						for (int i = 0; i < 3; i ++) {
-							MCP_Set_Position_By_Player(&Pos[i], Ofset[i], Player);
-						}
-					break;
-					case SDLK_d:
-						Player.x += 0.1f;
-						for (int i = 0; i < 3; i ++) {
-							MCP_Set_Position_By_Player(&Pos[i], Ofset[i], Player);
-						}
-					break;
-					case SDLK_w:
-						Player.z += 0.1f;
-						for (int i = 0; i < 3; i ++) {
-							MCP_Set_Position_By_Player(&Pos[i], Ofset[i], Player);
-						}
-					break;
-					case SDLK_s:
-						Player.z -= 0.1f;
-						for (int i = 0; i < 3; i ++) {
-							MCP_Set_Position_By_Player(&Pos[i], Ofset[i], Player);
-						}
-					break;
-				}
-			}
-		}
-		MCP_Render(Pos, Rret, window, 3);
-		SDL_Delay(10);
-	}
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-	
-}
-
